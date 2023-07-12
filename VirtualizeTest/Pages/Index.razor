@@ -1,0 +1,56 @@
+﻿@page "/"
+@using VirtualizeTest.Data
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<table>
+    <thead>
+    <tr>
+        @for (int i = 0; i < ColumnMultiplication; i++)
+        {
+
+            <th>Summary</th>
+            <th>Date</th>
+            <th>Temperature C</th>
+            <th>Temperature F</th>
+        }
+    </tr>
+    </thead>
+    <tbody>
+    <Virtualize Items="_weatherForecasts" Context="forecast">
+        <tr>
+            @for (int i = 0; i < ColumnMultiplication; i++)
+            {
+                <td>@forecast.Summary</td>
+                <td>@forecast.Date</td>
+                <td>@forecast.TemperatureC</td>
+                <td>@forecast.TemperatureF</td>
+            }
+        </tr>
+    </Virtualize>
+    </tbody>
+</table>
+
+@code {
+    private const int ColumnMultiplication = 10;
+
+    private List<WeatherForecast> _weatherForecasts = new();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        var random = new Random();
+
+        _weatherForecasts = Enumerable.Range(0, 10000).Select(i => new WeatherForecast
+        {
+            Summary = "Row " + i,
+            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(i)),
+            TemperatureC = random.Next(-50, 50)
+        }).ToList();
+
+    }
+
+}
